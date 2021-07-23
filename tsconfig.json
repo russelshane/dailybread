@@ -1,6 +1,26 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "experimentalDecorators": true,
+    "target": "es5",
+    "module": "commonjs",
+    "jsx": "react-native",
+    "lib": [
+      "es6",
+      "esnext.asynciterable"
+    ],
+    "strict": true,
+    "rootDir": ".",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true
+  },
+  "extends": "expo/tsconfig.base"
 }

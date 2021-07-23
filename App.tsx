@@ -1,21 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/*
+  Main application component
+  Unfolding Grace
+  Copyright (c) 2021
+*/
 
-export default function App() {
+import React, { FunctionComponent } from "react";
+import { StatusBar } from "expo-status-bar";
+import { Container } from "./ui/Container";
+import loadable from "@loadable/component";
+
+/* Dynamic Components */
+const Welcome = loadable(() => import("./components/Welcome"));
+
+const App: FunctionComponent = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <React.Fragment>
+      <Container>
+        <StatusBar style="auto" />
+        <Welcome />
+      </Container>
+    </React.Fragment>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+/* Export */
+export default App;
