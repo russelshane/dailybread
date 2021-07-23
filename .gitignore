@@ -8,6 +8,9 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+yarn-error.log
+yarn-debug.log
+npm-debug.log
 
 # SECRETS
 .env
