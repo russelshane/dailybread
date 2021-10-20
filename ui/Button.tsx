@@ -4,7 +4,7 @@
 */
 
 import React, { FunctionComponent } from "react";
-import styled from "styled-components/native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../styles/globalColors";
 
 /* TS */
@@ -15,29 +15,28 @@ type ButtonProps = {
 
 const Button: FunctionComponent<ButtonProps> = ({ children, onPress }) => {
   return (
-    <React.Fragment>
-      <ButtonContainer onPress={onPress}>
-        <ButtonText>{children}</ButtonText>
-      </ButtonContainer>
-    </React.Fragment>
+    <View>
+      <TouchableOpacity onPress={onPress} style={styles.buttonStyles}>
+        <Text style={styles.buttonText}>{children}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 /* Styles */
-const ButtonContainer = styled.TouchableOpacity`
-  padding: 16px 20px;
-  border-radius: 5px;
-  border: none;
-  background: ${colors.foreground};
-  color: ${colors.background};
-`;
+const styles = StyleSheet.create({
+  buttonStyles: {
+    borderRadius: 10,
+    padding: "16px 20px",
+    border: "none",
+    background: colors.foreground,
+    color: colors.background,
+  },
 
-const ButtonText = styled.Text`
-  font-size: 14px;
-  line-height: 14px;
-  font-weight: 600;
-  text-align: center;
-`;
+  buttonText: {
+    color: colors.background,
+  },
+});
 
 /* Export */
 export default Button;

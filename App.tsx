@@ -4,21 +4,13 @@
   Copyright (c) 2021
 */
 
-import loadable from "@loadable/component";
-import Button from "./ui/Button";
-import React, { useState, Fragment, FunctionComponent, useEffect } from "react";
-import { Container } from "./ui/Container";
-import { Text } from "react-native";
-import AppLoading from "expo-app-loading";
-
-/* Dynamic Components */
-const Welcome = loadable(() => import("./components/Welcome"));
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const App: FunctionComponent = () => {
   /* Interactive State */
-  const [welcome, setWelcome] = useState(true);
-  const [verse, setVerse] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [verse, setVerse] = useState([]);
 
   /* Fetch New Verse */
   useEffect(() => {
@@ -27,6 +19,9 @@ const App: FunctionComponent = () => {
         "https://uncovered-treasure-v1.p.rapidapi.com/today",
         {
           method: "GET",
+
+          // better get yourself a key.
+
           headers: {
             "x-rapidapi-key":
               "7055c4aa75mshdfe5c5a3cfaf98bp1a6155jsn919e1202d396",
@@ -39,57 +34,59 @@ const App: FunctionComponent = () => {
 
       setVerse(results);
       setLoading(false);
-      console.log(loading);
     };
     fetchData();
   }, []);
 
   /* Render */
   return (
-    <Fragment>
-      <Container>
-        {welcome && (
-          <React.Fragment>
-            <Welcome />
-            <Button onPress={() => setWelcome(false)}>Continue</Button>
-          </React.Fragment>
-        )}
-        {!welcome && (
-          <React.Fragment>
-            {verse ? (
-              verse.map((val: any, index) => (
-                <React.Fragment key={index}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: "#ddd",
-                      textAlign: "center",
-                      padding: "20px",
-                    }}
-                  >
-                    {val.text}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: "#999999",
-                      textAlign: "center",
-                      padding: "10px 20px",
-                    }}
-                  >
-                    {val.context}
-                  </Text>
-                </React.Fragment>
-              ))
-            ) : (
-              <AppLoading />
-            )}
-          </React.Fragment>
-        )}
-      </Container>
-    </Fragment>
+    <View style={styles.container}>
+      {loading ? (
+        <Text style={styles.text}>Loading verse...</Text>
+      ) : (
+        <View style={styles.container}>
+          {verse && (
+            <>
+              <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
+              <Text style={styles.context}>- {(verse[0] as any)?.context}</Text>
+            </>
+          )}
+        </View>
+      )}
+    </View>
   );
 };
+
+/* Styles */
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(44,44,46)",
+    padding: 20,
+    textAlign: "center",
+  },
+
+  text: {
+    color: "rgb(219,219,219)",
+    fontFamily: "sans-serif",
+    fontSize: 18,
+    lineHeight: 26,
+    display: "flex",
+  },
+
+  context: {
+    display: "flex",
+    justifyContent: "center",
+    color: "rgb(180,180,180)",
+    fontFamily: "sans-serif",
+    fontSize: 16,
+    lineHeight: 22,
+    marginTop: 30,
+  },
+});
 
 /* Export */
 export default App;
