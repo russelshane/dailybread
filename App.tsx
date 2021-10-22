@@ -4,12 +4,14 @@
   Copyright (c) 2021
 */
 
+import dayjs from "dayjs";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 const App: FunctionComponent = () => {
   /* Interactive State */
   const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState("");
   const [verse, setVerse] = useState([]);
 
   /* Fetch New Verse */
@@ -33,60 +35,93 @@ const App: FunctionComponent = () => {
       const { results } = await response.json();
 
       setVerse(results);
+      console.log(results);
+
+      const response2 = await fetch(
+        "https://source.unsplash.com/1600x900/?nature,water",
+        {
+          method: "GET",
+        }
+      );
+
+      const res = await response2.url;
+      setImage(res);
+
       setLoading(false);
     };
     fetchData();
   }, []);
 
+  /* Styles */
+  const styles = StyleSheet.create({
+    container: {
+      display: "flex",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(28,28,30,0.6)",
+      padding: 20,
+      textAlign: "center",
+      borderRadius: 10,
+    },
+
+    backdrop: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: "rgb(28,28,30)",
+      backgroundImage: `url(${image})`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center center",
+    },
+
+    text: {
+      color: "rgb(229,229,234)",
+      fontFamily: "sans-serif",
+      fontSize: 18,
+      lineHeight: 26,
+      display: "flex",
+      marginTop: 30,
+      textAlign: "center",
+    },
+
+    context: {
+      display: "flex",
+      justifyContent: "center",
+      color: "rgb(209,209,214)",
+      fontFamily: "sans-serif",
+      fontSize: 14,
+      marginTop: 30,
+    },
+  });
+
   /* Render */
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <Text style={styles.text}>Loading verse...</Text>
-      ) : (
-        <View style={styles.container}>
-          {verse && (
-            <>
-              <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
-              <Text style={styles.context}>- {(verse[0] as any)?.context}</Text>
-            </>
-          )}
-        </View>
-      )}
+    <View style={styles.backdrop}>
+      <View style={styles.container}>
+        {loading ? (
+          <Image
+            style={{ width: 50, height: 50 }}
+            source={{
+              uri: "https://ik.imagekit.io/drs/unfolddinggrace/spinner_LW6IiDni2.svg",
+            }}
+          />
+        ) : (
+          <View style={styles.container}>
+            {verse && (
+              <>
+                <Text style={styles.context}>{(verse[0] as any)?.context}</Text>
+                <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
+                <Text style={styles.context}>
+                  {dayjs().format("MMMM D, YYYY")}
+                </Text>
+              </>
+            )}
+          </View>
+        )}
+      </View>
     </View>
   );
 };
-
-/* Styles */
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgb(44,44,46)",
-    padding: 20,
-    textAlign: "center",
-  },
-
-  text: {
-    color: "rgb(219,219,219)",
-    fontFamily: "sans-serif",
-    fontSize: 18,
-    lineHeight: 26,
-    display: "flex",
-  },
-
-  context: {
-    display: "flex",
-    justifyContent: "center",
-    color: "rgb(180,180,180)",
-    fontFamily: "sans-serif",
-    fontSize: 16,
-    lineHeight: 22,
-    marginTop: 30,
-  },
-});
-
 /* Export */
 export default App;
