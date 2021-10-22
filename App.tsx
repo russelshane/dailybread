@@ -6,7 +6,7 @@
 
 import dayjs from "dayjs";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 const App: FunctionComponent = () => {
   /* Interactive State */
@@ -67,9 +67,9 @@ const App: FunctionComponent = () => {
 
     backdrop: {
       flex: 1,
+      height: "100%",
       padding: 20,
       backgroundColor: "rgb(28,28,30)",
-      backgroundImage: `url(${image})`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center center",
@@ -95,31 +95,47 @@ const App: FunctionComponent = () => {
     },
   });
 
+  const bgLink = {
+    uri: image ? image : undefined,
+  };
+
   /* Render */
   return (
-    <View style={styles.backdrop}>
-      <View style={styles.container}>
-        {loading ? (
-          <Image
-            style={{ width: 50, height: 50 }}
-            source={{
-              uri: "https://ik.imagekit.io/drs/unfolddinggrace/spinner_LW6IiDni2.svg",
-            }}
-          />
-        ) : (
+    <View
+      style={{
+        flex: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgb(28,28,30)",
+      }}
+    >
+      {loading ? (
+        <Image
+          style={{ width: 50, height: 50 }}
+          source={{
+            uri: "https://ik.imagekit.io/drs/unfolddinggrace/spinner_LW6IiDni2.svg",
+          }}
+        />
+      ) : (
+        <ImageBackground source={bgLink} style={styles.backdrop}>
           <View style={styles.container}>
-            {verse && (
-              <>
-                <Text style={styles.context}>{(verse[0] as any)?.context}</Text>
-                <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
-                <Text style={styles.context}>
-                  {dayjs().format("MMMM D, YYYY")}
-                </Text>
-              </>
-            )}
+            <View style={styles.container}>
+              {verse && (
+                <>
+                  <Text style={styles.context}>
+                    {(verse[0] as any)?.context}
+                  </Text>
+                  <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
+                  <Text style={styles.context}>
+                    {dayjs().format("MMMM D, YYYY")}
+                  </Text>
+                </>
+              )}
+            </View>
           </View>
-        )}
-      </View>
+        </ImageBackground>
+      )}
     </View>
   );
 };
