@@ -4,11 +4,12 @@
   Copyright (c) 2021
 */
 
-import dayjs from "dayjs";
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
+import React, { useEffect, useState } from "react";
+import Verse from "./components/Verse";
 
-const App: FunctionComponent = () => {
+const App: React.FC = () => {
   /* Interactive State */
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState("");
@@ -35,7 +36,6 @@ const App: FunctionComponent = () => {
       const { results } = await response.json();
 
       setVerse(results);
-      console.log(results);
 
       const response2 = await fetch(
         "https://source.unsplash.com/1600x900/?nature,water",
@@ -49,95 +49,31 @@ const App: FunctionComponent = () => {
 
       setLoading(false);
     };
+
+    const loadFonts = async () => {
+      await Font.loadAsync(
+        "antoutline",
+        // eslint-disable-next-line
+        require("@ant-design/icons-react-native/fonts/antoutline.ttf")
+      );
+
+      await Font.loadAsync(
+        "antfill",
+        // eslint-disable-next-line
+        require("@ant-design/icons-react-native/fonts/antfill.ttf")
+      );
+    };
+
     fetchData();
+    loadFonts();
   }, []);
 
-  /* Styles */
-  const styles = StyleSheet.create({
-    container: {
-      display: "flex",
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "rgba(28,28,30,0.6)",
-      padding: 20,
-      textAlign: "center",
-      borderRadius: 10,
-    },
-
-    backdrop: {
-      flex: 1,
-      height: "100%",
-      padding: 20,
-      backgroundColor: "rgb(28,28,30)",
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center center",
-    },
-
-    text: {
-      color: "rgb(229,229,234)",
-      fontFamily: "sans-serif",
-      fontSize: 18,
-      lineHeight: 26,
-      display: "flex",
-      marginTop: 30,
-      textAlign: "center",
-    },
-
-    context: {
-      display: "flex",
-      justifyContent: "center",
-      color: "rgb(209,209,214)",
-      fontFamily: "sans-serif",
-      fontSize: 14,
-      marginTop: 30,
-    },
-  });
-
-  const bgLink = {
-    uri: image ? image : undefined,
-  };
+  if (loading) {
+    return <AppLoading />;
+  }
 
   /* Render */
-  return (
-    <View
-      style={{
-        flex: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgb(28,28,30)",
-      }}
-    >
-      {loading ? (
-        <Image
-          style={{ width: 50, height: 50 }}
-          source={{
-            uri: "https://ik.imagekit.io/drs/unfolddinggrace/spinner_LW6IiDni2.svg",
-          }}
-        />
-      ) : (
-        <ImageBackground source={bgLink} style={styles.backdrop}>
-          <View style={styles.container}>
-            <View style={styles.container}>
-              {verse && (
-                <>
-                  <Text style={styles.context}>
-                    {(verse[0] as any)?.context}
-                  </Text>
-                  <Text style={styles.text}>{(verse[0] as any)?.text}</Text>
-                  <Text style={styles.context}>
-                    {dayjs().format("MMMM D, YYYY")}
-                  </Text>
-                </>
-              )}
-            </View>
-          </View>
-        </ImageBackground>
-      )}
-    </View>
-  );
+  return <Verse image={image} loading={loading} verse={verse} />;
 };
 /* Export */
 export default App;

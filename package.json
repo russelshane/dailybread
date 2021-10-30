@@ -9,6 +9,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ant-design/icons-react-native": "^2.3.2",
+    "@ant-design/react-native": "^4.2.0",
     "@expo/vector-icons": "^12.0.0",
     "@loadable/component": "^5.15.0",
     "axios": "^0.23.0",
